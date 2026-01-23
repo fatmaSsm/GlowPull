@@ -2,7 +2,7 @@
 Interactive pull-cord light bulb animation
 
 <p align="center">
-  <img src="GlowPull/GlowPull.gif" alt="Light Bulb Demo"/>
+  <img src="GlowPull/assets/GlowPull.gif" alt="Light Bulb Demo"/>
 </p>
 
 This is a simple web application built with HTML, CSS, and JavaScript that simulates a pull-cord light bulb. Pull the cord below the bulb, and watch the bulb switch between on and off states with a smooth animation.
