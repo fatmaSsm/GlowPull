@@ -18,7 +18,7 @@ This is a simple web application built with HTML, CSS, and JavaScript that simul
 
 You can try it live by opening `index.html` in your browser.
 
-## 🌜 How It Works
+## 🚩 How It Works
 
 1. The page displays a light bulb and a cord hanging below it.
 2. When the user clicks and drags (or pulls) the cord, a JavaScript function detects the pull.
