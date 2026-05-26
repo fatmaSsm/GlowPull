@@ -17,7 +17,7 @@
     const OFF_OFFSET_X = 0;
     const OFF_OFFSET_Y = 0;
 
-    const ON_EXTRA_SCALE = 0.95;
+    const ON_EXTRA_SCALE = 1.00;
     const ON_OFFSET_X = 0;
     const ON_OFFSET_Y = 0;
 
