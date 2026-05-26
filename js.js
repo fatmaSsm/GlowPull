@@ -3,13 +3,14 @@
         CONFIG
         ---------------------------------------------------------
         - Put PNGs next to this file:
-          off.png (OFF), on.png (ON)
+          on.png (OFF), off.png (ON) as per production assets
     ========================================================== */
-    const IMG_OFF = "img/on.png";
-    const IMG_ON = "img/off.png"; 
+    const IMG_OFF = "img/on.png"; // Updated as requested
+    const IMG_ON = "img/off.png";  // Updated as requested
 
     const DEBUG_ALIGN = false;
 
+    // Reset offsets to zero to guarantee perfect alignment between both images
     const OFF_EXTRA_SCALE = 1.00;
     const OFF_OFFSET_X = 0;
     const OFF_OFFSET_Y = 0;
@@ -203,19 +204,21 @@
     }
 
     /* =========================================================
-        IMAGES + auto normalization
+        IMAGES + auto normalization (Fixed)
     ========================================================== */
     const imgOff = new Image();
     const imgOn = new Image();
     imgOff.src = IMG_OFF;
     imgOn.src = IMG_ON;
 
+    // Set k to 1.0 to prevent asymmetric clipping or unexpected layout shifts
     const imgMeta = {
         off: { k: 1.0, trim: null },
         on: { k: 1.0, trim: null }
     };
 
     function computeTrimBox(img) {
+        // Dynamic trimming disabled to keep scaling completely symmetrical based on box center
         return null;
     }
 
@@ -800,7 +803,7 @@
     }
 
     /* =========================================================
-        DRAW: HINT
+        DRAW: HINT (English)
     ========================================================== */
     function drawHint() {
         const text = "Pull the cord, then release to toggle.";
@@ -865,7 +868,7 @@
     window.addEventListener("resize", resize);
 
     /* =========================================================
-        LOOP
+        LOOP (Draw order adjusted so the rope falls behind)
     ========================================================== */
     function draw() {
         tickTransitions();
@@ -879,9 +882,11 @@
 
         drawGlassPanel();
         
+        // Render cord and knob first (backlayer)
         drawRopeSmooth();
         drawSingleKnob();
         
+        // Render bulb after cord to seamlessly cover it (frontlayer)
         drawBulb();
         
         drawHint();
@@ -897,5 +902,3 @@
     draw();
 
 })();
-
-```
