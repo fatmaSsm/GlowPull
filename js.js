@@ -13,13 +13,23 @@
     const DEBUG_ALIGN = false;
 
     // Manual tuning knobs (for OFF image alignment)
+//    const OFF_EXTRA_SCALE = 1.00;
+//     const OFF_OFFSET_X = 0;
+//     const OFF_OFFSET_Y = 0;
+
+//     const ON_EXTRA_SCALE = 1.00;
+//     const ON_OFFSET_X = 0;
+//     const ON_OFFSET_Y = 0;
+
+        // Manual tuning knobs (for OFF image alignment)
     const OFF_EXTRA_SCALE = 1.00;
     const OFF_OFFSET_X = 0;
     const OFF_OFFSET_Y = 0;
-
-    const ON_EXTRA_SCALE = 1.00;
+    
+    // ON resmi için ince ayarlar (Boyutu %95'e çekip, Y ekseninde yukarı kaydırabilirsin)
+    const ON_EXTRA_SCALE = 0.95; // Resmi biraz küçültmek istersen düşürebilirsin
     const ON_OFFSET_X = 0;
-    const ON_OFFSET_Y = 0;
+    const ON_OFFSET_Y = -5; // Eksi değerler ampulü yukarı taşır, kaymayı sıfırlar
 
     // Animation speeds
     const SKY_EASE = 0.060;
