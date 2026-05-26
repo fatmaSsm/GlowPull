@@ -5,8 +5,8 @@
         - Put PNGs next to this file:
           off.png (OFF), on.png (ON)
     ========================================================== */
-    const IMG_OFF = "img/off.png";
-    const IMG_ON = "img/on.png"; 
+    const IMG_OFF = "img/on.png";
+    const IMG_ON = "img/off.png"; 
 
     const DEBUG_ALIGN = false;
 
