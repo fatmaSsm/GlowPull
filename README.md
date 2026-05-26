@@ -45,7 +45,7 @@ This is a simple web application built with HTML, CSS, and JavaScript that simul
 ---
 
 ## 👩‍💻 Author
-- fatmaSsm
+* **Fatma Susam** - [@fatmaSsm](https://github.com/fatmaSsm)
 
 
 
