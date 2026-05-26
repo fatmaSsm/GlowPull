@@ -1,18 +1,15 @@
 (() => {
     /* =========================================================
-       CONFIG
-       ---------------------------------------------------------
-       - Put PNGs next to this file:
-         off.png (OFF), on.png (ON)
-       - If OFF doesn't align with ON, adjust:
-         OFF_EXTRA_SCALE / OFF_OFFSET_X / OFF_OFFSET_Y
+        CONFIG
+        ---------------------------------------------------------
+        - Put PNGs next to this file:
+          off.png (OFF), on.png (ON)
     ========================================================== */
-    const IMG_OFF = "img/on.png";
-    const IMG_ON = "img/off.png";
+    const IMG_OFF = "img/off.png";
+    const IMG_ON = "img/on.png"; 
 
     const DEBUG_ALIGN = false;
 
-    // Manual tuning knobs (for OFF image alignment)
     const OFF_EXTRA_SCALE = 1.00;
     const OFF_OFFSET_X = 0;
     const OFF_OFFSET_Y = 0;
@@ -20,7 +17,6 @@
     const ON_EXTRA_SCALE = 1.00;
     const ON_OFFSET_X = 0;
     const ON_OFFSET_Y = 0;
-
 
     // Animation speeds
     const SKY_EASE = 0.060;
@@ -33,7 +29,7 @@
     const SEGMENTS = 20;
 
     /* =========================================================
-       CANVAS (with DPR)
+        CANVAS (with DPR)
     ========================================================== */
     const canvas = document.getElementById("c");
     const ctx = canvas.getContext("2d");
@@ -42,7 +38,7 @@
     let W = 0, H = 0, dpr = 1;
 
     /* =========================================================
-       RESPONSIVE SIZES
+        RESPONSIVE SIZES
     ========================================================== */
     const BASE = {
         BULB_BOX: 190,
@@ -80,14 +76,14 @@
     let HINT_FONT = BASE.HINT_FONT;
 
     /* =========================================================
-       STATE
+        STATE
     ========================================================== */
     let targetOn = false;
     let skyT = 0; // 0=day, 1=night
     let lampT = 0; // 0=off, 1=on
 
     /* =========================================================
-       LAYOUT
+        LAYOUT
     ========================================================== */
     const bulb = {
         x: () => W * 0.5,
@@ -99,7 +95,7 @@
     }
 
     /* =========================================================
-       HELPERS
+        HELPERS
     ========================================================== */
     function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
 
@@ -114,7 +110,6 @@
         ctx.closePath();
     }
 
-    // Distance from point to a segment (for rope hover)
     function distToSegment(px, py, ax, ay, bx, by) {
         const vx = bx - ax, vy = by - ay;
         const wx = px - ax, wy = py - ay;
@@ -129,7 +124,7 @@
     }
 
     /* =========================================================
-       RESPONSIVE (derived from uiScale)
+        RESPONSIVE (derived from uiScale)
     ========================================================== */
     function recomputeResponsive() {
         uiScale = clamp(Math.min(W / 900, H / 700), 0.70, 1.15);
@@ -153,7 +148,7 @@
     }
 
     /* =========================================================
-       SKY OBJECTS
+        SKY OBJECTS
     ========================================================== */
     let stars = [];
     let clouds = [];
@@ -190,7 +185,7 @@
     }
 
     /* =========================================================
-       SUBTLE NOISE (glass feel)
+        SUBTLE NOISE (glass feel)
     ========================================================== */
     let noisePattern = null;
     function buildNoise() {
@@ -208,7 +203,7 @@
     }
 
     /* =========================================================
-       IMAGES + auto normalization (align widths)
+        IMAGES + auto normalization
     ========================================================== */
     const imgOff = new Image();
     const imgOn = new Image();
@@ -221,50 +216,19 @@
     };
 
     function computeTrimBox(img) {
-        const w = img.naturalWidth, h = img.naturalHeight;
-        if (!w || !h) return null;
-
-        const o = document.createElement("canvas");
-        o.width = w; o.height = h;
-        const oc = o.getContext("2d", { willReadFrequently: true });
-        oc.clearRect(0, 0, w, h);
-        oc.drawImage(img, 0, 0);
-
-        let data;
-        try { data = oc.getImageData(0, 0, w, h).data; }
-        catch (e) { return null; }
-
-        const TH = 2;
-        let minX = w, maxX = -1;
-
-        for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
-                const a = data[(y * w + x) * 4 + 3];
-                if (a > TH) {
-                    if (x < minX) minX = x;
-                    if (x > maxX) maxX = x;
-                }
-            }
-        }
-        if (maxX < 0) return null;
-        return { tw: (maxX - minX + 1) };
+        return null;
     }
 
     function updateNormalization() {
-        const to = imgMeta.off.trim;
-        const tn = imgMeta.on.trim;
-        if (!to || !tn) return;
-        const ref = Math.max(to.tw, tn.tw);
-        imgMeta.off.k = clamp(ref / to.tw, 0.90, 1.30);
-        imgMeta.on.k = clamp(ref / tn.tw, 0.90, 1.30);
-        imgMeta.off.k = clamp(imgMeta.off.k * 1.03, 0.90, 1.32);
+        imgMeta.off.k = 1.0;
+        imgMeta.on.k = 1.0;
     }
 
-    imgOff.onload = () => { imgMeta.off.trim = computeTrimBox(imgOff); updateNormalization(); };
-    imgOn.onload = () => { imgMeta.on.trim = computeTrimBox(imgOn); updateNormalization(); };
+    imgOff.onload = () => { updateNormalization(); };
+    imgOn.onload = () => { updateNormalization(); };
 
     /* =========================================================
-       LIGHT BEAMS (360-degree)
+        LIGHT BEAMS (360-degree)
     ========================================================== */
     let beams = [];
     function genBeams() {
@@ -285,7 +249,7 @@
     }
 
     /* =========================================================
-       ROPE PHYSICS (Verlet)
+        ROPE PHYSICS (Verlet)
     ========================================================== */
     const rope = [];
     let segLen = 1;
@@ -355,7 +319,7 @@
     }
 
     /* =========================================================
-       HIT TESTS (knob + rope)
+        HIT TESTS (knob + rope)
     ========================================================== */
     function hitHandle(x, y) {
         const h = handlePoint();
@@ -363,7 +327,6 @@
     }
 
     function hitRope(x, y) {
-        // rope thickness + padding
         const hitRadius = (2.4 * uiScale) + 10;
         for (let i = 0; i < rope.length - 1; i++) {
             const a = rope[i], b = rope[i + 1];
@@ -384,7 +347,7 @@
     });
 
     /* =========================================================
-       POINTER (single knob)
+        POINTER (single knob)
     ========================================================== */
     let dragging = false, activeId = null;
     let startX = 0, startY = 0, movedEnough = false;
@@ -438,7 +401,7 @@
     });
 
     /* =========================================================
-       AUDIO (synthetic SFX + subtle hum)
+        AUDIO (synthetic SFX + subtle hum)
     ========================================================== */
     let ac = null, master = null, humOsc = null, humGain = null;
     let lastPullSfx = 0;
@@ -510,7 +473,7 @@
     }
 
     /* =========================================================
-       DRAW: BACKGROUND (day/night blend)
+        DRAW: BACKGROUND (day/night blend)
     ========================================================== */
     function drawDay(alpha) {
         if (alpha <= 0) return;
@@ -619,7 +582,7 @@
     }
 
     /* =========================================================
-       DRAW: GLASS PANEL
+        DRAW: GLASS PANEL
     ========================================================== */
     function drawGlassPanel() {
         const cx = bulb.x(), cy = bulb.y();
@@ -663,7 +626,7 @@
     }
 
     /* =========================================================
-       DRAW: BLOOM + BEAMS + BULB
+        DRAW: BLOOM + BEAMS + BULB
     ========================================================== */
     function drawBloom() {
         if (lampT <= 0.001) return;
@@ -778,7 +741,7 @@
     }
 
     /* =========================================================
-       DRAW: ROPE + SINGLE KNOB
+        DRAW: ROPE + SINGLE KNOB
     ========================================================== */
     function drawRopeSmooth() {
         ctx.save();
@@ -837,7 +800,7 @@
     }
 
     /* =========================================================
-       DRAW: HINT (English)
+        DRAW: HINT
     ========================================================== */
     function drawHint() {
         const text = "Pull the cord, then release to toggle.";
@@ -864,7 +827,7 @@
     }
 
     /* =========================================================
-       TRANSITIONS + HUM
+        TRANSITIONS + HUM
     ========================================================== */
     function tickTransitions() {
         const goal = targetOn ? 1 : 0;
@@ -880,7 +843,7 @@
     }
 
     /* =========================================================
-       RESIZE (RESPONSIVE ENTRY)
+        RESIZE (RESPONSIVE ENTRY)
     ========================================================== */
     function resize() {
         dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
@@ -902,7 +865,7 @@
     window.addEventListener("resize", resize);
 
     /* =========================================================
-       LOOP
+        LOOP
     ========================================================== */
     function draw() {
         tickTransitions();
@@ -915,19 +878,24 @@
         drawNoise(0.08);
 
         drawGlassPanel();
-        drawBulb();
+        
         drawRopeSmooth();
         drawSingleKnob();
+        
+        drawBulb();
+        
         drawHint();
 
         requestAnimationFrame(draw);
     }
 
     /* =========================================================
-       INIT
+        INIT
     ========================================================== */
     buildNoise();
     resize();
     draw();
 
 })();
+
+```
